@@ -1,28 +1,28 @@
 package cg
 
-import(
-    "fmt"
+import (
+	"fmt"
 )
 
 type Player struct {
-    Name string
-    Level int
-    Exp int
-    Room int
+	Name  string
+	Level int
+	Exp   int
+	Room  int
 
-    mq chan *Message //等待收取的消息
+	mq chan *Message //等待收取的消息
 }
 
 func NewPlayer() *Player {
-    m := make(chan *Messgae, 1024)
-    player := &Player{"", 0, 0, 0, m}
+	m := make(chan *Message, 1024)
+	player := &Player{"", 0, 0, 0, m}
 
-    go func(p *Player) {
-        for {
-            msg := <-p.mq
-            fmt.Println(p.Name, "Received message:", msg.Content)
-        }
-    }(player)
+	go func(p *Player) {
+		for {
+			msg := <-p.mq
+			fmt.Println(p.Name, "Received message:", msg.Content)
+		}
+	}(player)
 
-    return player
+	return player
 }
